@@ -2,11 +2,13 @@
     "private": true,
     "scripts": {
         "dev": "vite",
+        "tsc": "tsc",
         "build": "vite build"
     },
     "devDependencies": {
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.2",
-        "vite": "^4.0.0"
+        "vite": "^4.0.0",
+        "typescript": "^5.0.4"
     }
 }

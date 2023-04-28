@@ -4,8 +4,9 @@
         "noImplicitAny": false,
         "removeComments": true,
         "preserveConstEnums": true,
-        "outFile": "../../built/local/tsc.js",
+        "noEmit": true,
         "sourceMap": true,
+        "lib": ["es7", "dom"],
         "isolatedModules": true
     },
     "include": ["resources/**/*.ts"]
