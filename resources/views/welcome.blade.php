@@ -6,11 +6,14 @@
 
         <title>MineSweeperOnline</title>
 
-        <!-- Fonts -->
-
-        <!-- Styles -->
+        @include("partial.head.bootstrap")
+        @vite("resources/css/navbar.sass")
+        @vite("resources/assets/font-awesome-pro-v6/css/all.css")
     </head>
     <body class="antialiased">
+
+        @include("partial.navbar")
+
 
     </body>
 </html>

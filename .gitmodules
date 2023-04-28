@@ -1,0 +1,3 @@
+[submodule "resources/assets/font-awesome-pro-v6"]
+	path = resources/assets/font-awesome-pro-v6
+	url = https://github.com/hung1001/font-awesome-pro-v6.git

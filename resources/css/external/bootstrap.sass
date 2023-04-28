@@ -1,0 +1,14 @@
+@import "bootstrap/scss/bootstrap"
+
+.bg
+    @extend .bg-light
+
+body
+    background-color: rgba(248, 249, 250, .1)
+
+@include color-mode(dark)
+    .bg
+        @extend .bg-dark
+
+
+

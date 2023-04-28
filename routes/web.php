@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', ["page" => "info"]);
 });
 
-Route::get('/game', function () {
-    return view('game');
+Route::get('/login', function () {
+    if(Auth::check())
+        return redirect("/");
+    return view('login');
 });

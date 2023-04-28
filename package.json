@@ -5,10 +5,14 @@
         "tsc": "tsc",
         "build": "vite build"
     },
+    "dependencies": {
+        "bootstrap": "^5.3.0-alpha3"
+    },
     "devDependencies": {
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.2",
         "vite": "^4.0.0",
-        "typescript": "^5.0.4"
+        "typescript": "^5.0.4",
+        "sass": "^1.62.1"
     }
 }
