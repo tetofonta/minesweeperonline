@@ -18,10 +18,6 @@ Route::get('/', function () {
     return view('welcome', ["page" => "info"]);
 });
 
-Route::get('/game', function () {
-    return view('game', ["page" => "info"]);
-});
-
 Route::get('/login', function () {
     if(Auth::check())
         return redirect("/");

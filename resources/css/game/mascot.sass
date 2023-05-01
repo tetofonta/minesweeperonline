@@ -1,0 +1,145 @@
+$mascot-color: rgb(255, 255, 135)
+
+.mascot
+    width: 100%
+    padding-bottom: 100%
+    position: relative
+
+    .mascot-background
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background-color: $mascot-color
+        border-radius: 50%
+        display: flex
+        flex-direction: column
+        justify-content: center
+
+
+    .__mascot-container
+        width: 100%
+        display: flex
+        flex-direction: row
+        justify-content: space-evenly
+        align-items: center
+
+    .mascot-container-eye
+        @extend .__mascot-container
+        height: 60%
+
+        .mascot-eye-open
+            width: 30%
+            padding-bottom: 30%
+            border-radius: 50%
+            background-color: white
+            position: relative
+
+            &:after
+                content: ""
+                width: 40%
+                padding-bottom: 40%
+                position: absolute
+                background-color: black
+                border-radius: 50%
+                top: 10%
+                left: 27.5%
+
+        .mascot-eye-dead
+            @extend .mascot-eye-open
+            &:after
+                background-color: transparent
+                content: '\274c'
+                font-size: 8pt
+                top: 50%
+                padding-bottom: 0
+                transform: translateY(-50%) !important
+
+        .mascot-eye-password
+            @extend .mascot-eye-open
+            background-color: transparent
+            border-bottom:
+                color: black
+                style: solid
+            &:after
+                display: none
+
+    .mascot-container-mouth
+        @extend .__mascot-container
+        height: 40%
+        align-items: flex-start
+
+        .mascot-mouth-open
+            width: 40%
+            height: 50%
+            background-color: rgb(128, 0, 0)
+            border-radius: 0 0 999em 999em
+            transition: .1s ease
+
+        .mascot-mouth-dead
+            @extend .mascot-mouth-open
+            border-radius: 999em 999em 0 0
+
+        .mascot-mouth-happy
+            @extend .mascot-mouth-open
+            width: 50%
+
+        .mascot-mouth-suspense
+            @extend .mascot-mouth-open
+            width: 30%
+            border-radius: 50%
+
+    &.mascot-state-standard
+        .mascot-container-eye
+            .mascot-eye
+                @extend .mascot-eye-open
+        .mascot-container-mouth
+            .mascot-mouth
+                @extend .mascot-mouth-open
+
+    &.mascot-state-suspense
+        .mascot-container-eye
+            .mascot-eye
+                @extend .mascot-eye-open
+                &:after
+                    width: 55%
+                    height: 55%
+                    left: 22.5%
+        .mascot-container-mouth
+            .mascot-mouth
+                @extend .mascot-mouth-suspense
+
+    &.mascot-state-happy
+        .mascot-container-eye
+            .mascot-eye
+                @extend .mascot-eye-open
+        .mascot-container-mouth
+            .mascot-mouth
+                @extend .mascot-mouth-happy
+
+    &.mascot-state-dead
+        .mascot-container-eye
+            .mascot-eye
+                @extend .mascot-eye-dead
+        .mascot-container-mouth
+            .mascot-mouth
+                @extend .mascot-mouth-dead
+
+    &.mascot-state-password
+        .mascot-container-eye
+            .mascot-eye
+                @extend .mascot-eye-password
+        .mascot-container-mouth
+            .mascot-mouth
+                @extend .mascot-mouth-open
+
+    &.mascot-state-password-spy
+        .mascot-container-eye
+            .mascot-eye.mascot-eye-1
+                @extend .mascot-eye-open
+            .mascot-eye.mascot-eye-2
+                @extend .mascot-eye-password
+        .mascot-container-mouth
+            .mascot-mouth
+                @extend .mascot-mouth-suspense
