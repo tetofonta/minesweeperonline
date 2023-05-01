@@ -5,8 +5,8 @@ export function startMoveEyes(eyeClass: string){
         const elements: HTMLElement[] = Array.from(document.getElementsByClassName(eyeClass))
         elements.map(async (e) => {
             let rect = e.getBoundingClientRect();
-            let x = rect.left + e.clientWidth
-            let y = rect.top + e.clientHeight
+            let x = rect.left + e.clientWidth/2
+            let y = rect.top + e.clientHeight/2
             let rad = Math.atan2(evt.pageX - x, evt.pageY - y);
             let rot = (rad * (180 / Math.PI) * -1) + 180;
 

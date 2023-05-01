@@ -2,6 +2,9 @@
 <nav class="navbar navbar-expand-lg bg">
     <div class="container">
         <a class="logo-navbar navbar-brand" href="/"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse justify-content-between align-items-center my-4" id="navbar-menu">
             <ul class="navbar-nav mr-auto">
                 <li class="
@@ -62,15 +65,12 @@
                 @endguest
                 <li class="nav-item d-flex flex-row align-items-center">
                     <a class="nav-link" href="javascript:void(0)" id="theme-toggler" role="button">
-                        <i class="fa-solid fa-brightness fa-lg theme-icon" id="theme-icon-light" style="display: none"></i>
-                        <i class="fa-solid fa-moon-stars fa-lg theme-icon" id="theme-icon-dark" style="display: none"></i>
-                        <i class="fa-solid fa-moon-over-sun fa-lg theme-icon" id="theme-icon-auto" style="display: none"></i>
+                        <span class="theme-icon d-sm-block d-md-none" style="display: none" id="theme-icon-light"><i class="fa-solid fa-brightness fa-lg"></i> Light Theme</span>
+                        <span class="theme-icon d-sm-block d-md-none" style="display: none" id="theme-icon-dark"><i class="fa-solid fa-moon-stars fa-lg"></i> Dark Theme</span>
+                        <span class="theme-icon d-sm-block d-md-none" style="display: none" id="theme-icon-auto"><i class="fa-solid fa-moon-over-sun fa-lg"></i> Auto Theme</span>
                     </a>
                 </li>
             </ul>
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
     </div>
 </nav>

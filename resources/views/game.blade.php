@@ -42,26 +42,12 @@
 
 
     <script>
-        // document.body.onmousemove = evt => {
-        //     let eye = $('.eye')
-        //     let x = (eye.offset().left) + (eye.width() / 2);
-        //     let y = (eye.offset().top) + (eye.height() / 2);
-        //     let rad = Math.atan2(event.pageX - x, event.pageY - y);
-        //     let rot = (rad * (180 / Math.PI) * -1) + 180;
-        //     eye.css({
-        //         '-webkit-transform': 'rotate(' + rot + 'deg)',
-        //         '-moz-transform': 'rotate(' + rot + 'deg)',
-        //         '-ms-transform': 'rotate(' + rot + 'deg)',
-        //         'transform': 'rotate(' + rot + 'deg)'
-        //     });
-        // }
-        //
-        // document.body.onmousedown = evt => {
-        //     $('.mouth').addClass('mouth-suspance')
-        // }
-        //
-        // document.body.onmouseup = evt => {
-        //     $('.mouth').removeClass('mouth-suspance')
-        // }
+        document.body.onmousedown = evt => {
+            document.getElementsByClassName('mouth')[0].classList.add('mouth-suspance')
+        }
+
+        document.body.onmouseup = evt => {
+            document.getElementsByClassName('mouth')[0].classList.remove('mouth-suspance')
+        }
     </script>
 </html>
