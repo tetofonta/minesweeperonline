@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\UserController;
+use \App\Http\Middleware\DBTransaction;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +17,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome', ["page" => "info"]);
+    return view('html.home.welcome');
 });
 
-Route::get('/login', function () {
-    if(Auth::check())
-        return redirect("/");
-    return view('login');
+Route::get('/register', function () {
+    if(Auth::check()) return redirect("/");
+    return view('html.register.register');
 });
+Route::post('/register', [UserController::class, 'store'])->middleware(DBTransaction::class);
+Route::get('/confirm/{id}', [UserController::class, 'verify'])->middleware(DBTransaction::class);
+
+Route::get('/login', function () {
+    if(Auth::check()) return redirect("/");
+    return view('html.login.login');
+});
+Route::post('/login', [UserController::class, 'login']);
+Route::get('/logout', [UserController::class, 'logout']);
+
+Route::get('/profile', function () {
+    return view('html.profile.profile', ["page" => "profile"]);
+})->middleware('auth');
+
+Route::post('/profile-delete', [UserController::class, 'self_delete'])->middleware('auth')->middleware(DBTransaction::class);
+Route::post('/chpsw', [UserController::class, 'chpsw'])->middleware('auth')->middleware(DBTransaction::class);

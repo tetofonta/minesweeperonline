@@ -1,0 +1,1 @@
+<b>A new account has been created, and its name is {{ $username }}. Confirm this email address at the link <a href="http://localhost/confirm/{{ $token }}">http://localhost/confirm/{{ $token }}</a></b>
