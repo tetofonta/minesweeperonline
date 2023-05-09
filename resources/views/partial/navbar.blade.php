@@ -65,9 +65,9 @@
                 @endguest
                 <li class="nav-item d-flex flex-row align-items-center">
                     <a class="nav-link" href="javascript:void(0)" id="theme-toggler" role="button">
-                        <span class="theme-icon d-sm-block d-md-none" style="display: none" id="theme-icon-light"><i class="fa-solid fa-brightness fa-lg"></i> Light Theme</span>
-                        <span class="theme-icon d-sm-block d-md-none" style="display: none" id="theme-icon-dark"><i class="fa-solid fa-moon-stars fa-lg"></i> Dark Theme</span>
-                        <span class="theme-icon d-sm-block d-md-none" style="display: none" id="theme-icon-auto"><i class="fa-solid fa-moon-over-sun fa-lg"></i> Auto Theme</span>
+                        <span class="theme-icon" style="display: none" id="theme-icon-light"><i class="fa-solid fa-brightness fa-lg"></i><span class="d-md-none mx-3">Light Theme</span></span>
+                        <span class="theme-icon" style="display: none" id="theme-icon-dark"><i class="fa-solid fa-moon-stars fa-lg"></i><span class="d-md-none mx-3">Dark Theme</span></span>
+                        <span class="theme-icon" style="display: none" id="theme-icon-auto"><i class="fa-solid fa-moon-over-sun fa-lg"></i><span class="d-md-none mx-3">Auto Theme</span></span>
                     </a>
                 </li>
             </ul>
