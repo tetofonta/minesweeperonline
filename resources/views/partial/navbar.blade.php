@@ -5,13 +5,15 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-between align-items-center my-4" id="navbar-menu">
+        <div class="collapse navbar-collapse justify-content-between align-items-center py-4" id="navbar-menu">
             <ul class="navbar-nav mr-auto">
                 <li class="
                     nav-item
                     dropdown
-                    @if($page == "standings")
-                        active
+                    @isset($page)
+                        @if($page == "standings")
+                            active
+                        @endif
                     @endif
                 ">
                     <a class="nav-link dropdown-toggle" href="#" id="classifiche-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -29,8 +31,10 @@
                 </li>
                 <li class="
                     nav-item
-                    @if($page == "info")
-                        active
+                    @isset($page)
+                        @if($page == "info")
+                            active
+                        @endif
                     @endif
                 ">
                     <a class="nav-link" href="#">Info</a>
@@ -46,13 +50,21 @@
 
             <ul class="navbar-nav">
                 @auth
-                    <li class="nav-item dropdown">
+                    <li class="
+                        nav-item
+                        dropdown
+                        @isset($page)
+                            @if($page == "profile")
+                                active
+                            @endif
+                        @endif
+                    ">
                         <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ auth()->user()->getAuthIdentifierName() }}
+                            {{ auth()->user()->username }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="user-dropdown">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Logout</a>
+                            <a class="dropdown-item" href="/profile">Profile</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
                         </div>
                     </li>
                 @endauth
@@ -65,9 +77,9 @@
                 @endguest
                 <li class="nav-item d-flex flex-row align-items-center">
                     <a class="nav-link" href="javascript:void(0)" id="theme-toggler" role="button">
-                        <span class="theme-icon" style="display: none" id="theme-icon-light"><i class="fa-solid fa-brightness fa-lg"></i><span class="d-md-none mx-3">Light Theme</span></span>
-                        <span class="theme-icon" style="display: none" id="theme-icon-dark"><i class="fa-solid fa-moon-stars fa-lg"></i><span class="d-md-none mx-3">Dark Theme</span></span>
-                        <span class="theme-icon" style="display: none" id="theme-icon-auto"><i class="fa-solid fa-moon-over-sun fa-lg"></i><span class="d-md-none mx-3">Auto Theme</span></span>
+                        <span class="theme-icon" style="display: none" id="theme-icon-light"><i class="fa-solid fa-brightness fa-lg"></i><span class="d-sm-block d-md-none">Light Theme</span></span>
+                        <span class="theme-icon" style="display: none" id="theme-icon-dark"><i class="fa-solid fa-moon-stars fa-lg"></i><span class="d-sm-block d-md-none">Dark Theme</span></span>
+                        <span class="theme-icon" style="display: none" id="theme-icon-auto"><i class="fa-solid fa-moon-over-sun fa-lg"></i><span class="d-sm-block d-md-none">Auto Theme</span></span>
                     </a>
                 </li>
             </ul>

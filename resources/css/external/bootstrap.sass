@@ -6,9 +6,44 @@
 body
     background-color: rgba(248, 249, 250, .1)
 
+nav li.active
+    background-color: rgba(0, 0, 0, .1)
+    margin:
+        top: -2rem
+        bottom: calc(-2rem)
+    padding:
+        left: .5rem
+        right: .5rem
+    display: flex
+    align-items: center
+    box-sizing: border-box
+    border-bottom:
+        color: rgba(0, 0, 0, .8)
+        style: solid
+        width: 6px
+
+.danger-border
+    position: relative
+    margin: 10px
+    &:before
+        position: absolute
+        content: ""
+        top: -10px
+        bottom: -10px
+        left: -10px
+        right: -10px
+        z-index: -1
+        background: repeating-linear-gradient(-45deg, #cb5a5e, #cb5a5e 12px, #DDD 10px, #DDD 23px)
+
 @include color-mode(dark)
     .bg
         @extend .bg-dark
 
+    nav li.active
+        @extend .active
+        background-color: rgba(255, 255, 255, .1)
+        border-bottom:
+            color: rgba(250, 250, 250, .8)
 
-
+    .danger-border:before
+        background: repeating-linear-gradient(-45deg, #968c00, #968c00 12px, #000 10px, #000 23px)
