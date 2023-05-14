@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 use PharIo\Manifest\Email;
@@ -105,6 +106,8 @@ class UserController extends Controller
     }
 
     public function self_delete(Request $request){
+        if(Storage::exists("public/avatars/" . sha1(auth()->user()->id)))
+            Storage::delete("public/avatars/" . sha1(auth()->user()->id));
         auth()->user()->delete();
         //todo send email
         return redirect('/');
@@ -129,6 +132,14 @@ class UserController extends Controller
 
         //todo send email
         return view('html.profile.profile', ["info_msg" => "Password changed"]);
+    }
+
+    public function chimg(Request $req){
+        if(! $req->hasFile('profilepic'))
+            return view("html.profile.profile", ["error_msg" => "Invalid Image"]);
+
+        $req->profilepic->storeAs('public/avatars/', sha1(auth()->user()->id));
+        return view('html.profile.profile');
     }
     /**
      * Display the specified resource.

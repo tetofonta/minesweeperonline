@@ -1,25 +1,21 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.nonav')
 
-    <title>MineSweeperOnline - Register</title>
+@section('title')
+    Register
+@endsection
 
-    @include("partial.head.bootstrap")
-    @vite("resources/assets/font-awesome-pro-v6/css/all.css")
+@section('css')
     @vite("resources/css/logo.sass")
-    @vite("resources/css/game/mascot.sass")
-</head>
-<body class="antialiased">
+@endsection
 
+@section('body')
 <section class="vh-100">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card shadow-2-strong" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
-                        <div class="logo-big w-5 p-5 mb-5"></div>
+                        <a href="/" alt="homepage"><div class="logo-big w-5 p-5 mb-5"></div></a>
                         <h3 class="mb-5">Register to MineSweeperOnline</h3>
 
                         @isset($error_msg)
@@ -53,21 +49,9 @@
         </div>
     </div>
 </section>
-<span id="text-length-determining" class=""></span>
-</body>
+<span id="text-length-determining" style="opacity: 0"></span>
+@endsection
 
-<script>
-    let show_password = [false, false]
-    document.getElementById("toggle-show-password").addEventListener('click', () => {
-        document.getElementById("password-input").type = show_password[0] ? "password" : "text"
-        show_password[0] = !show_password[0]
-    })
-    document.getElementById("toggle-show-password-repeat").addEventListener('click', () => {
-        document.getElementById("password-repeat-input").type = show_password[1] ? "password" : "text"
-        show_password[1] = !show_password[1]
-    })
-</script>
-
-@vite("resources/js/LoginMascotBehavior.ts")
-
-</html>
+@section('scripts')
+    @vite('resources/js/RegisterFormBehavior.ts')
+@endsection
