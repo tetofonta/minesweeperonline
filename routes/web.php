@@ -23,9 +23,9 @@ Route::get('/', function () {
 Route::get('/register', function () {
     if(Auth::check()) return redirect("/");
     return view('html.register.register');
-});
-Route::post('/register', [UserController::class, 'store'])->middleware(DBTransaction::class);
-Route::get('/confirm/{id}', [UserController::class, 'verify'])->middleware(DBTransaction::class);
+})->name('register.get');
+Route::post('/register', [UserController::class, 'store'])->middleware(DBTransaction::class)->name('register.post');
+Route::get('/confirm/{id}', [UserController::class, 'verify'])->middleware(DBTransaction::class)->name('register.confirm');
 
 Route::get('/login', function () {
     if(Auth::check()) return redirect("/");
@@ -36,7 +36,7 @@ Route::get('/logout', [UserController::class, 'logout']);
 
 Route::get('/profile', function () {
     return view('html.profile.profile', ["page" => "profile"]);
-})->middleware('auth');
+})->middleware('auth')->name('profile.get');
 
 Route::post('/profile-delete', [UserController::class, 'self_delete'])->middleware('auth')->middleware(DBTransaction::class);
 Route::post('/chpsw', [UserController::class, 'chpsw'])->middleware('auth')->middleware(DBTransaction::class);

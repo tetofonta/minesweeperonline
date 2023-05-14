@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.main')
 
-    <title>MineSweeperOnline</title>
+@section('title')
+    Profile
+@endsection
 
-    @include("partial.head.bootstrap")
-    @vite("resources/css/navbar.sass")
-    @vite("resources/assets/font-awesome-pro-v6/css/all.css")
-</head>
-<body class="antialiased">
+@section('css')
+    @vite("resources/css/logo.sass")
+@endsection
 
-@include("partial.navbar")
+@section('body')
 <div class="container my-4">
 
     @if(isset($error_msg) || isset($info_msg))
@@ -46,7 +42,4 @@
 
 @include("html.profile.modal.profileadmin", ["id" => "adminModal"])
 @include("html.profile.modal.profiledelete", ["id" => "deleteModal"])
-
-</body>
-
-</html>
+@endsection

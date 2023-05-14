@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.nonav')
 
-    <title>MineSweeperOnline - Register</title>
+@section('title')
+    Thankyou
+@endsection
 
-    @include("partial.head.bootstrap")
-    @vite("resources/assets/font-awesome-pro-v6/css/all.css")
+@section('css')
     @vite("resources/css/logo.sass")
-    @vite("resources/css/game/mascot.sass")
-</head>
-<body class="antialiased">
+@endsection
 
+@section('body')
 <section class="vh-100">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -32,8 +28,4 @@
         </div>
     </div>
 </section>
-<span id="text-length-determining" class=""></span>
-</body>
-
-
-</html>
+@endsection

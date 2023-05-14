@@ -10,10 +10,8 @@
                 <li class="
                     nav-item
                     dropdown
-                    @isset($page)
-                        @if($page == "standings")
-                            active
-                        @endif
+                    @if(Request::is('standings'))
+                        active
                     @endif
                 ">
                     <a class="nav-link dropdown-toggle" href="#" id="classifiche-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,10 +29,8 @@
                 </li>
                 <li class="
                     nav-item
-                    @isset($page)
-                        @if($page == "info")
-                            active
-                        @endif
+                    @if(Request::is('info'))
+                        active
                     @endif
                 ">
                     <a class="nav-link" href="#">Info</a>
@@ -53,10 +49,8 @@
                     <li class="
                         nav-item
                         dropdown
-                        @isset($page)
-                            @if($page == "profile")
-                                active
-                            @endif
+                        @if(Request::is('profile.get'))
+                            active
                         @endif
                     ">
                         <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
