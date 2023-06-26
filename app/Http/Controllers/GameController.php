@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use function PHPUnit\Framework\isNull;
 
@@ -23,7 +24,7 @@ class GameController extends Controller
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
                 srand($seed + $x * $width + $y);
-                $field[$x * $width + $y] = rand();
+                $field[$x * $width + $y] = rand() + $x * $width + $y;
             }
         }
 
@@ -40,7 +41,7 @@ class GameController extends Controller
         if ($y >= $height) return false;
 
         srand($seed + $x * $width + $y);
-        return rand() >= $limit;
+        return rand() + $x * $width + $y > $limit;
     }
 
     private function getCountAround($x, $y, $width, $height, $seed, $limit)
@@ -71,7 +72,7 @@ class GameController extends Controller
 
         $ret = ["updated" => 1, "value" => $value, "state" => implode("/", $rows)];
 
-        if ($value > 0) return $ret;
+        if ($value > 0 || $value === "B") return $ret;
         for ($i = -1; $i < 2; $i++)
             for ($j = -1; $j < 2; $j++) {
                 if (
@@ -92,6 +93,7 @@ class GameController extends Controller
 
 
     public static function isGameRunning(){
+        if(!Auth::check()) return false;
         return Game::where('user_id', auth()->user()->id)->where('status', 'running')->count() > 0;
     }
 
@@ -100,7 +102,21 @@ class GameController extends Controller
     }
 
     public function api_get_game_state(Request $request){
-        return ["state" => $request->_game->state];
+        return ["state" => $request->_game->state, "created_at" => $request->_game->created_at];
+    }
+
+    public function api_update_game_state(Request $request, $x, $y){
+        $ret = $this->updateState($request->_game->state, $x, $y, $request->_game->width, $request->_game->height, $request->_game->seed, $request->_game->limit);
+        $request->_game->state = $ret["state"];
+        $request->_game->save();
+
+        if($ret["value"] === "B"){
+            $request->_game->status = "lost";
+            $request->_game->finished_at = now();
+            $request->_game->save();
+        }
+
+        return $ret;
     }
 
     public function newGame(Request $request)
