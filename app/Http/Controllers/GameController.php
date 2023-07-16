@@ -91,38 +91,66 @@ class GameController extends Controller
         return $ret;
     }
 
+    private function isGameFinished($state, $bombs){
+        if(str_contains($state, 'B')) return ["finished" => true, "status" => "lost"];
+        if(substr_count($state, '-') <= $bombs) return ["finished" => true, "status" => "won"];
+        return ["finished" => false, "status" => "running"];
+    }
 
-    public static function isGameRunning(){
-        if(!Auth::check()) return false;
+    public static function isGameRunning()
+    {
+        if (!Auth::check()) return false;
         return Game::where('user_id', auth()->user()->id)->where('status', 'running')->count() > 0;
     }
 
-    public function getGame(Request $request){
+    public function getGame(Request $request)
+    {
         return view('html.game.game', ['error' => false, 'width' => $request->_game->width, 'height' => $request->_game->height, 'bombs' => $request->_game->bombs]);
     }
 
-    public function api_get_game_state(Request $request){
+    public function api_get_game_state(Request $request)
+    {
         return ["state" => $request->_game->state, "created_at" => $request->_game->created_at];
     }
 
-    public function api_update_game_state(Request $request, $x, $y){
+    public function api_surrender(Request $request){
+        $previous_game = Game::where('user_id', auth()->user()->id)->where('status', 'running')->first();
+        $previous_game->status = 'abandoned';
+        $previous_game->finished_at = now();
+        $previous_game->save();
+        return redirect("/");
+    }
+
+    public function api_update_game_state(Request $request, $x, $y)
+    {
         $ret = $this->updateState($request->_game->state, $x, $y, $request->_game->width, $request->_game->height, $request->_game->seed, $request->_game->limit);
         $request->_game->state = $ret["state"];
         $request->_game->save();
 
-        if($ret["value"] === "B"){
-            $request->_game->status = "lost";
+        $res = $this->isGameFinished($ret['state'], $request->_game->bombs);
+        if ($res['finished']) {
+            $request->_game->status = $res['status'];
             $request->_game->finished_at = now();
             $request->_game->save();
+
+            for($y = 0; $y < $request->_game->heightl; $y++){
+                for($x = 0; $x < $request->_game->width; $x++){
+                    if($this->isBombAt($x, $y, $request->_game->width, $request->_game->height, $request->_game->seed, $request->_game->limit)) {
+                        $r = $this->updateState($ret['state'], $x, $y, $request->_game->width, $request->_game->height, $request->_game->seed, $request->_game->limit);
+                        $ret['state'] = $r["state"];
+                    }
+                }
+            }
         }
 
+        $ret["finished"] = $res["finished"];
+        $ret["status"] = $res["status"];
         return $ret;
     }
-
     public function newGame(Request $request)
     {
         $request->validate([
-            'game-type' => ['required'],
+            'game-type' => ['required']
         ]);
 
         if ($request['game-type'] == 'custom') {
@@ -133,10 +161,8 @@ class GameController extends Controller
             ]);
         }
 
-        if ($request['game-type'] != 'easy')
-            if ($request['game-type'] != 'normal')
-                if ($request['game-type'] != 'hard')
-                    if ($request['game-type'] != 'custom') return redirect('/');
+        if ($request['game-type'] != 'easy' && $request['game-type'] != 'normal' && $request['game-type'] != 'hard'&& $request['game-type'] != 'custom') return redirect('/');
+
 
         $width = $request['game-type'] == 'easy' ? 8 : ($request['game-type'] == 'normal' ? 16 : ($request['game-type'] == 'hard' ? 30 : $request['custom-w']));
         $height = $request['game-type'] == 'easy' ? 8 : ($request['game-type'] == 'normal' ? 16 : ($request['game-type'] == 'hard' ? 16 : $request['custom-h']));
@@ -158,10 +184,11 @@ class GameController extends Controller
         $game->seed = $game_seed['seed'];
         $game->limit = $game_seed['limit'];
         $game->status = "running";
+        $game->ranked = isset($request['ranked']) ? $request['ranked'] : false;
         $game->state = $this->updateState("", 0, 0, $width, $height, 0, 0);
         $game->save();
 
-        return view('html.game.game', ['error' => false, 'width' => $game->width, 'height' => $game->height, 'bombs' => $game->bombs]);
+        return redirect("/game");
     }
 
 }

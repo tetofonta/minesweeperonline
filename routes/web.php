@@ -51,3 +51,4 @@ Route::get('/game', [GameController::class, 'getGame'])->middleware('auth')->mid
 //should be an api
 Route::get('/api/game/state', [GameController::class, "api_get_game_state"])->middleware('auth')->middleware(InGame::class);
 Route::get('/api/game/update/{x}/{y}', [GameController::class, "api_update_game_state"])->middleware('auth')->middleware(DBTransaction::class)->middleware(InGame::class);
+Route::post('/api/game/surrender', [GameController::class, "api_surrender"])->middleware(DBTransaction::class)->middleware(InGame::class);

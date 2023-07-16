@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('bombs');
             $table->integer('seed');
             $table->integer('limit');
+            $table->boolean('ranked')->default(true);
             $table->string('status'); //abandoned won lost running
             $table->text('state');
             $table->timestamp('created_at')->nullable();

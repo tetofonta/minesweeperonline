@@ -31,7 +31,8 @@ class Game extends Model
         'limit',
         'status',
         'state',
-        'finished_at'
+        'finished_at',
+        'ranked'
     ];
 
     public function user()

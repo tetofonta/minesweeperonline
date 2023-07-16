@@ -5,6 +5,7 @@ class Game{
     private readonly mascot: Mascot
     private time = 0;
     private timer: number | null = null;
+    private eyeListener = (e) => this.mascot.setEyeRotation(e.pageX, e.pageY)
 
     constructor(
         private readonly width: number,
@@ -15,23 +16,30 @@ class Game{
         private readonly timer_id: string,
         private readonly bomb_id: string,
         private readonly field_id: string,
+        private enabled: boolean,
     ) {
         this.mascot = new Mascot(mascot_id);
         this.mascot.setState('standard')
     }
 
     public async init(id: string): Promise<void>{
-        document.getElementById(this.play_area_id).addEventListener('mousemove', (e) => this.mascot.setEyeRotation(e.pageX, e.pageY))
+        document.getElementById(this.play_area_id).addEventListener('mousemove', this.eyeListener)
+
+        this.set_bombs(this.bombs)
+        if(!this.enabled){
+            this.set_timer(new Date().toString())
+            this.reset_field(Array(10).fill('-'.repeat(10)).join("/"));
+            return;
+        }
+
         const res = await fetch('/api/game/state');
         if(res.status != 200){
             this.mascot.setState('dead');
-            alert("Connection error.")
         }
         const data = await res.json();
+        this.reset_field(data.state)
         this.set_timer(data.created_at)
         this.start_timer();
-        this.reset_field(data.state)
-        this.set_bombs(this.bombs)
     }
 
     private cell_mouse_down(e : MouseEvent, x, y){
@@ -78,9 +86,14 @@ class Game{
                 c.style.width = c.style.height = c.style.paddingTop = `calc(min(80px, ${100/Math.max(this.height, this.width)}%`;
                 r.appendChild(c)
                 c.style.fontSize = (c.clientWidth)*0.85 + "px"
-                c.onmousedown = (e) => this.cell_mouse_down(e, i, j);
-                c.onmouseup = (e) => this.cell_mouse_up(e, i, j);
-                c.oncontextmenu = (e) => this.toggle_flag(e, i, j)
+
+                if(this.enabled) {
+                    c.onmousedown = (e) => this.cell_mouse_down(e, i, j);
+                    c.onmouseup = (e) => this.cell_mouse_up(e, i, j);
+                    c.oncontextmenu = (e) => this.toggle_flag(e, i, j)
+                } else {
+                    c.style.cursor = "not-allowed"
+                }
             }
         }
         await this.update_field(state)
@@ -114,12 +127,21 @@ class Game{
     private async update(x, y){
         const res = await fetch(`/api/game/update/${x}/${y}`);
         const data = await res.json();
-        await this.update_field(data.state);
-        if(data?.value == "B"){
-            this.mascot.setState("dead");
-            //todo endgame
+        if(data.finished){
+            this.stop_timer();
+            this.mascot.setState(data.status == "lost" ? "dead" : "happy");
+            this.enabled = false
+            await this.reset_field(data.state)
+
+            if(data.status == 'lost'){
+                document.getElementById(this.play_area_id).removeEventListener('mousemove', this.eyeListener)
+                this.mascot.clearEyeRotation()
+            }
+            return;
         }
+
         this.mascot.setState("standard");
+        await this.update_field(data.state);
     }
 
     public set_timer(time: string){
@@ -127,10 +149,12 @@ class Game{
     }
 
     public start_timer(){
-        this.timer = setInterval(() => {
+        const f = () => {
             document.getElementById(this.timer_id).innerHTML = this.format_time();
             this.time += 1
-        }, 1000)
+        }
+        this.timer = setInterval(f, 1000)
+        f()
     }
 
     public stop_timer(){
@@ -152,7 +176,7 @@ class Game{
     private set_bombs(intval: number){
         this.bombs = intval;
         if(this.bombs < 0) document.getElementById(this.bomb_id).innerHTML = "00"
-        document.getElementById(this.bomb_id).innerHTML = ("0" + intval).slice(-2)
+        document.getElementById(this.bomb_id).innerHTML = ("0" + intval).slice(intval > 99 ? 1 : -2)
     }
 }
 

@@ -9,6 +9,7 @@
             </div>
             <form action="/game/new" method="post" class="modal-content p-3" id="{{ $id }}-form">
                 @csrf
+
                 <label>
                     <input
                         type="checkbox" name="ranked" id="{{$id}}-cbx-ranked" data-toggle="toggle" data-height="60" data-width="100"
