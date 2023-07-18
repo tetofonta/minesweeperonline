@@ -15,7 +15,7 @@
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card shadow-2-strong" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
-                        <div class="logo-big w-5 p-5 mb-5"></div>
+                        <a href="/" alt="homepage"><div class="logo-big w-5 p-5 mb-5"></div></a>
                         <h3 class="mb-5">Register to MineSweeperOnline</h3>
 
                         @isset($error_msg)
@@ -49,8 +49,7 @@
         </div>
     </div>
 </section>
-<span id="text-length-determining" class=""></span>
-</body>
+<span id="text-length-determining" style="opacity: 0"></span>
 @endsection
 
 @section('scripts')

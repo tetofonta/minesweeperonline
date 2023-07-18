@@ -1,10 +1,9 @@
 @extends('layouts.main')
 
 @section('title')
-    HOME Page
+    GAME
 @endsection
 
 @section('body')
-
 
 @endsection
