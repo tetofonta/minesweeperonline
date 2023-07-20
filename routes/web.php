@@ -48,7 +48,7 @@ Route::post('/chimg', [UserController::class, 'chimg'])->middleware('auth');
 Route::post('/game/new', [GameController::class, 'newGame'])->middleware('auth')->middleware(DBTransaction::class);
 Route::get('/game', [GameController::class, 'getGame'])->middleware('auth')->middleware(InGame::class);
 
-Route::get('/standings/{type}', [GameController::class, 'getStandings']);
+Route::get('/standings/{type}', [GameController::class, 'getStandings'])->name('standings');
 
 //should be an api
 Route::get('/api/game/state', [GameController::class, "api_get_game_state"])->middleware('auth')->middleware(InGame::class);

@@ -194,12 +194,12 @@ class GameController extends Controller
 
     public function getStandings(Request $request, $type){
 
-        $users = User::select(['users.username as username', DB::raw("(SUM(CASE WHEN games.status = 'won' THEN games.bombs WHEN games.status = 'running' THEN 0 ELSE -games.bombs END) + 1000) as points")])
+        $users = User::select(['users.username as username', DB::raw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) as points")])
             ->join('games', 'games.user_id', '=', 'users.id')
             ->whereNotNull('users.email_verified_at')
-            ->where('games.ranked', '=', 'true')
             ->groupBy('users.username')
             ->orderBy('points', 'DESC')
+            ->orderByRaw('COUNT(games.id) ASC')
             ->limit($request->query('page_size', 10))
             ->offset($request->query('page', 0)*$request->query('page_size', 10));
 
@@ -208,7 +208,7 @@ class GameController extends Controller
         else if($type == 'day')
             $users = $users->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 day")));
 
-        return $users->get();
+        return view('html.standings.standing')->with("users", $users->get());
     }
 
 }

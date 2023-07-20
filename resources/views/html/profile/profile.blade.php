@@ -25,8 +25,8 @@
     <div class="p-4 mx-6 my-3 d-flex justify-content-between bg flex-column flex-md-row align-items-center">
         <div class="d-flex w-100 w-md-50 align-items-md-end align-items-center flex-column flex-md-row my-3">
             <div class="user-profile-img"
-                @if( Storage::exists("public/avatars/" . sha1(auth()->user()->id)) )
-                    style="background-image: url({{ Storage::url("public/avatars/" . sha1(auth()->user()->id)) }})"
+                @if( Storage::exists("public/avatars/" . sha1(auth()->user()->username)) )
+                    style="background-image: url({{ Storage::url("public/avatars/" . sha1(auth()->user()->username)) }})"
                 @endif
             >
                 <button class="image-edit d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#profileimgModal">

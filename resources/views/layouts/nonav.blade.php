@@ -6,6 +6,7 @@
 
     <title>minesweeperonline - @yield('title')</title>
     @vite("resources/js/external/jquery.min.js")
+    @vite("resources/js/external/jquery-ui.min.js")
     @include("partial.head.bootstrap")
     @vite("resources/assets/font-awesome-pro-v6/css/all.css")
 

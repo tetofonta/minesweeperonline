@@ -140,7 +140,7 @@ class UserController extends Controller
         if(! $req->hasFile('profilepic'))
             return view("html.profile.profile", ["error_msg" => "Invalid Image"]);
 
-        $req->profilepic->storeAs('public/avatars/', sha1(auth()->user()->id));
+        $req->profilepic->storeAs('public/avatars/', sha1(auth()->user()->username));
         return view('html.profile.profile');
     }
 
@@ -167,5 +167,20 @@ class UserController extends Controller
             "games" => $games,
             "points" => $ret
         ];
+    }
+
+    public function searchUser(Request $req){
+        $query = $req->query('q', "");
+
+        $matches = User::select(['username', DB::raw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) as points"), DB::raw("SIMILARITY(users.username, ?) as similarty")])
+            ->join('games', 'games.user_id', '=', 'users.id')
+            ->whereNotNull('users.email_verified_at')
+            ->groupBy('users.username')
+            ->orderBy('similarty', 'DESC')
+            ->orderBy('points', 'DESC')
+            ->setBindings([$query])
+            ->limit(10);
+
+        return $matches->get();
     }
 }

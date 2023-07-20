@@ -9,21 +9,22 @@ $utilities: ( 'width': ( property: width, class: w, responsive: true, values: ( 
 body
     background-color: rgba(248, 249, 250, .1)
 
-nav li.active
-    background-color: rgba(0, 0, 0, .1)
-    margin:
-        top: -2rem
-        bottom: calc(-2rem)
-    padding:
-        left: .5rem
-        right: .5rem
-    display: flex
-    align-items: center
-    box-sizing: border-box
-    border-bottom:
-        color: rgba(0, 0, 0, .8)
-        style: solid
-        width: 6px
+@include media-breakpoint-up(md)
+    nav li.active
+        background-color: rgba(0, 0, 0, .1)
+        margin:
+            top: -2rem
+            bottom: calc(-2rem)
+        padding:
+            left: .5rem
+            right: .5rem
+        display: flex
+        align-items: center
+        box-sizing: border-box
+        border-bottom:
+            color: rgba(0, 0, 0, .8)
+            style: solid
+            width: 6px
 
 .danger-border
     position: relative
