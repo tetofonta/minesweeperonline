@@ -61,7 +61,7 @@
                 </a>
             @endif
 
-            <ul class="navbar-nav">
+            <ul class="navbar-nav  mr-auto">
                 @if(!Request::is('game') && !Request::is('game/new'))
                     <li class="d-block d-lg-none nav-item">
                     <a class="nav-link"
@@ -95,7 +95,7 @@
                             {{ auth()->user()->username }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="user-dropdown">
-                            <a class="dropdown-item" href="/profile">Profile</a>
+                            <a class="dropdown-item" href="{{route('profile', ["username" => auth()->user()->username])}}">Profile</a>
                             <a class="dropdown-item" href="/logout">Logout</a>
                         </div>
                     </li>

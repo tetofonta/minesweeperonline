@@ -36,10 +36,10 @@ Route::get('/login', function () {
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
 
-Route::get('/profile', function () {
-    return view('html.profile.profile', ["page" => "profile"]);
-})->middleware('auth')->name('profile.get');
-Route::get('/profile/{username}', [UserController::class, 'show']);
+//Route::get('/profile', function () {
+//    return view('html.profile.profile', ["page" => "profile"]);
+//})->middleware('auth')->name('profile.get');
+Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile');
 
 Route::post('/profile-delete', [UserController::class, 'self_delete'])->middleware('auth')->middleware(DBTransaction::class);
 Route::post('/chpsw', [UserController::class, 'chpsw'])->middleware('auth')->middleware(DBTransaction::class);

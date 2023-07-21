@@ -44,17 +44,18 @@ class Game{
 
     private cell_mouse_down(e : MouseEvent, x, y){
         const target = e.target as HTMLElement
-        if(target.classList.contains("cell-hidden") && target.classList.contains('cell-flag')) return;
-        if(e.button == 2) return
+        if(target.classList.contains("cell-hidden") && target.classList.contains('cell-flag') && e.button != 1) return; //click on flagged cell or uncovered cell allowed only on wheel press
+        if(e.button == 2) return //right click
         this.mascot.setState("suspense")
     }
 
     private cell_mouse_up(e : MouseEvent, x, y){
         const target = e.target as HTMLElement
-        if(target.classList.contains("cell-hidden") && target.classList.contains('cell-flag')) return;
-        if(e.button == 2) return
+        if(target.classList.contains("cell-hidden") && target.classList.contains('cell-flag') && e.button != 1) return;
+        if(e.button == 2) return //right click
         this.mascot.setState("standard")
-        this.update(x, y);
+        if(e.button == 0) //left click
+            this.update(x, y);
     }
 
     private toggle_flag(e : MouseEvent, x, y){
@@ -133,16 +134,22 @@ class Game{
             this.enabled = false
             await this.reset_field(data.state)
 
-            if(data.status == 'lost'){
-                document.getElementById(this.play_area_id).removeEventListener('mousemove', this.eyeListener)
-                this.mascot.clearEyeRotation()
-            }
+            const mascot = new Mascot('mascotEndGame')
+            document.getElementById('time').innerText = this.format_time()
+            document.getElementById(this.play_area_id).removeEventListener('mousemove', this.eyeListener)
+            this.mascot.clearEyeRotation()
+            mascot.setState(data.status == "lost" ? "dead" : "happy")
+            document.getElementById('points').innerText = data.total_points + `(${data.points})`
+            document.getElementById('pos').innerText = data.pos
+            // @ts-ignore
+            $('#endGameModal').modal('show')
             return;
         }
 
         this.mascot.setState("standard");
         await this.update_field(data.state);
     }
+
 
     public set_timer(time: string){
         this.time = Math.round((Date.now() - new Date(time).getTime())/1000)

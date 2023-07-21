@@ -61,4 +61,5 @@
 
 
     @include("html.game.modal.surrender", ["id" => "surrenderModal"])
+    @include("html.game.modal.win-lost", ["id" => "endGameModal"])
 @endsection

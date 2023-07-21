@@ -148,13 +148,14 @@ class UserController extends Controller
         $user = User::where('username', '=', $username)->first();
         if(!$user) return response("not found", 404);
 
-        $games = Game::select(['bombs', 'status', 'created_at', 'finished_at', 'ranked'])
-            ->where('user_id', '=', $user->id)
-            ->whereNotNull('finished_at')->get();
+        $games = $user->games()->whereNotNull('finished_at')->get();
+
         $points = Game::select([DB::raw("(CASE WHEN status='won' THEN bombs ELSE -bombs END) as point")])
             ->where('user_id', '=', $user->id)
             ->where('status', '!=', 'running')
-            ->where('ranked', '=', 'true')->get();
+            ->where('ranked', '=', 'true')
+            ->orderBy('finished_at', 'ASC')
+            ->get();
 
         $ret = array_fill(0, count($points), 0);
         for($i = 0; $i < count($points); $i++){
@@ -162,11 +163,11 @@ class UserController extends Controller
             else $ret[$i] = $ret[$i-1] + $points[$i]->point;
         }
 
-        return [
+        return view('html.profile.profile', [
             "user" => $user,
             "games" => $games,
             "points" => $ret
-        ];
+        ]);
     }
 
     public function searchUser(Request $req){

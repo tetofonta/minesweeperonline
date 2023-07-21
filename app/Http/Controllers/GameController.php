@@ -18,8 +18,7 @@ class GameController extends Controller
     {
         if ($numberOfBombs > $width * $height) throw new BadRequestException();
 
-//        $seed = random_int(0, getrandmax()/2);
-        $seed = 0;
+        $seed = random_int(0, getrandmax()/2);
 
         $field = [];
         for ($x = 0; $x < $width; $x++) {
@@ -134,7 +133,7 @@ class GameController extends Controller
             $request->_game->finished_at = now();
             $request->_game->save();
 
-            for($y = 0; $y < $request->_game->heightl; $y++){
+            for($y = 0; $y < $request->_game->height; $y++){
                 for($x = 0; $x < $request->_game->width; $x++){
                     if($this->isBombAt($x, $y, $request->_game->width, $request->_game->height, $request->_game->seed, $request->_game->limit)) {
                         $r = $this->updateState($ret['state'], $x, $y, $request->_game->width, $request->_game->height, $request->_game->seed, $request->_game->limit);
@@ -142,6 +141,14 @@ class GameController extends Controller
                     }
                 }
             }
+
+            $total_points = auth()->user()->getPoints();
+
+            $pos = auth()->user()->getStandingPosition();
+
+            $ret["points"] = ($request->_game->ranked ? $request->_game->bombs : 0) * ($res["status"] == "won" ? 1 : -1);
+            $ret["total_points"] = $total_points;
+            $ret["pos"] = $pos;
         }
 
         $ret["finished"] = $res["finished"];
@@ -208,7 +215,9 @@ class GameController extends Controller
         else if($type == 'day')
             $users = $users->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 day")));
 
-        return view('html.standings.standing')->with("users", $users->get());
+        return view('html.standings.standing')
+            ->with("users", $users->get())
+            ->with("count", User::count());
     }
 
 }
