@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GameController;
+use App\Http\Middleware\Admin;
 use App\Http\Middleware\InGame;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +51,12 @@ Route::post('/game/new', [GameController::class, 'newGame'])->middleware('auth')
 Route::get('/game', [GameController::class, 'getGame'])->middleware('auth')->middleware(InGame::class);
 
 Route::get('/standings/{type}', [GameController::class, 'getStandings'])->name('standings');
+
+Route::get('/admin/', [AdminController::class, 'getDashoard'])->name('admin.dashboard')->middleware(Admin::class);
+Route::get('/admin/user/', function (){return view('html.admin.user');})->name('admin.user')->middleware(Admin::class);
+Route::post('/admin/user/', [AdminController::class, 'editUser'])->name('admin.user')->middleware(Admin::class);
+Route::delete('/admin/user/', [AdminController::class, 'deleteUser'])->name('admin.user')->middleware(Admin::class);
+Route::get('/admin/game/', [AdminController::class, 'getDashoard'])->name('admin.game')->middleware(Admin::class);
 
 //should be an api
 Route::get('/api/game/state', [GameController::class, "api_get_game_state"])->middleware('auth')->middleware(InGame::class);

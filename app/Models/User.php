@@ -30,7 +30,8 @@ class User extends Authenticatable
         'username',
         'id',
         'password',
-        'is_admin'
+        'admin',
+        'active'
     ];
 
     /**
@@ -49,7 +50,9 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'last_login' => 'datetime'
+        'last_login' => 'datetime',
+        'admin' => 'boolean',
+        'active' => 'boolean'
     ];
 
     public function games(){
@@ -58,14 +61,16 @@ class User extends Authenticatable
 
     public function getPoints(){
         return User::select([DB::raw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) as points")])
-            ->join('games', 'users.id', '=', 'games.user_id')
+            ->leftJoin('games', 'users.id', '=', 'games.user_id')
             ->where('users.id', '=', $this->id)
             ->first()->points;
     }
 
     public function getStandingPosition(){
+        if(!$this->active) return -1;
         return User::select(['username'])
             ->join('games', 'users.id', '=', 'games.user_id')
+            ->where('users.active', '=', 'true')
             ->groupBy('users.username')
             ->havingRaw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) >= ?", [$this->getPoints()])
             ->count();

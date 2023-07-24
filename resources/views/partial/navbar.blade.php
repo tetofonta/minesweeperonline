@@ -32,6 +32,21 @@
                 ">
                     <a class="nav-link" href="#">Info</a>
                 </li>
+                <li class="
+                    nav-item
+                    dropdown
+                    @if(Request::is('/admin/') || Request::is('/admin/user/') || Request::is('/admin/game/') )
+                        active
+                    @endif
+                ">
+                    <a class="nav-link dropdown-toggle" href="#" id="admin-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="admin-dropdown">
+                        <a class="dropdown-item" href="{{route('admin.user')}}">User Management</a>
+                        <a class="dropdown-item" href="{{route('admin.game')}}">Game Management</a>
+                    </div>
+                </li>
             </ul>
 
             <div class="input-group d-flex justify-content-center mx-lg-5 mx-sm-1">
@@ -41,7 +56,7 @@
                 </ul>
             </div>
 
-            @if(!Request::is('game') && !Request::is('game/new'))
+            @if(!Request::is('game') && !Request::is('game/new') && !(!is_null(auth()->user()) && !auth()->user()->active))
                 <a class="btn btn-primary btn-md d-flex text-nowrap py-3 px-2 mx-3 d-none d-lg-block"
                     @auth
                         @if($gameController::isGameRunning())
@@ -62,7 +77,7 @@
             @endif
 
             <ul class="navbar-nav  mr-auto">
-                @if(!Request::is('game') && !Request::is('game/new'))
+                @if(!Request::is('game') && !Request::is('game/new') && !(!is_null(auth()->user()) && !auth()->user()->active))
                     <li class="d-block d-lg-none nav-item">
                     <a class="nav-link"
                        @auth
@@ -96,6 +111,9 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="user-dropdown">
                             <a class="dropdown-item" href="{{route('profile', ["username" => auth()->user()->username])}}">Profile</a>
+                            @if(auth()->user()->admin)
+                                <a class="dropdown-item" href="{{route('admin.dashboard')}}">Admin Dashboard</a>
+                            @endif
                             <a class="dropdown-item" href="/logout">Logout</a>
                         </div>
                     </li>

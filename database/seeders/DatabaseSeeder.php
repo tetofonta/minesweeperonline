@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
             Game::factory(32)->create(["user_id" => $e]);
         });
 
+        User::factory(1)->admin()->create(['id' => 'admin@localhost.local', 'username' => 'admin', 'created_at' => now()]);
+
     }
 }

@@ -157,6 +157,9 @@ class GameController extends Controller
     }
     public function newGame(Request $request)
     {
+        if(!auth()->user()->active)
+            return redirect("/game");
+
         $request->validate([
             'game-type' => ['required']
         ]);

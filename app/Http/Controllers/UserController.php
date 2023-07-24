@@ -148,7 +148,7 @@ class UserController extends Controller
         $user = User::where('username', '=', $username)->first();
         if(!$user) return response("not found", 404);
 
-        $games = $user->games()->whereNotNull('finished_at')->get();
+        $games = $user->games()->where('status', '!=', 'running')->get();
 
         $points = Game::select([DB::raw("(CASE WHEN status='won' THEN bombs ELSE -bombs END) as point")])
             ->where('user_id', '=', $user->id)
@@ -174,8 +174,9 @@ class UserController extends Controller
         $query = $req->query('q', "");
 
         $matches = User::select(['username', DB::raw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) as points"), DB::raw("SIMILARITY(users.username, ?) as similarty")])
-            ->join('games', 'games.user_id', '=', 'users.id')
+            ->leftJoin('games', 'games.user_id', '=', 'users.id')
             ->whereNotNull('users.email_verified_at')
+            ->whereRaw('users.active = true')
             ->groupBy('users.username')
             ->orderBy('similarty', 'DESC')
             ->orderBy('points', 'DESC')
