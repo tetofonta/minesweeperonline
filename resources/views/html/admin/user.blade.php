@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-    Admin Dashboard
+    User Management
 @endsection
 
 @section('css')
@@ -11,7 +11,7 @@
 @section('scripts')
     <script>
         function openEditModal(username, enable, admin) {
-            $('.usernameinput').val(username)
+            $('#usernameinput').val(username)
             $('#usernametitle').text(username)
             if(enable)
                 $('#activeinput').attr('checked', 'checked')
@@ -22,7 +22,19 @@
                 $('#admininput').attr('checked', 'checked')
             else
                 $('#admininput').removeAttr('checked')
+
+            if(username === '{{auth()->user()->username}}')
+                $('#admininput').attr('disabled', 'disabled')
+            else
+                $('#admininput').removeAttr('disabled')
+
             $('#editmodal').modal('show')
+        }
+
+        function openDeleteModal(username){
+            $('#deleteusernameinput').val(username)
+            $('#deleteusernametitle').text(username)
+            $('#deletemodal').modal('show')
         }
     </script>
 @endsection
@@ -60,12 +72,10 @@
                     <td><a href="javascript:void(0)" onclick="openEditModal('{{$user->username}}', {{$user->active ? "true" : "false"}}, {{$user->admin ? "true" : "false"}})"
                            class="btn btn-outline"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     <td>
-                        <form action="/admin/user/" method="post">
-                            @method('DELETE')
-                            @csrf
-                            <input name="username" class="usernameinput" type="hidden" value="{{$user->username}}"/>
-                            <button type="submit" class="btn btn-outline"><i class="fa-solid fa-trash" style="color: red;"></i></button>
-                        </form>
+                        @if($user->username != auth()->user()->username)
+                        <a href="javascript:void(0)" onclick="openDeleteModal('{{$user->username}}')"
+                           class="btn btn-outline"><i class="fa-solid fa-trash" style="color: red;"></i></a>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -84,7 +94,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input name="username" type="hidden" value="" class="usernameinput" />
+                    <input name="username" type="hidden" value="" id="usernameinput" />
                     <div class="form-control">
                         <label>
                             <input name="active" type="checkbox" id="activeinput"/>
@@ -101,6 +111,28 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Edit user</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="/admin/user/" method="post" class="modal-content">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">User delete for <span id="deleteusernametitle"></span></h5>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="username" type="hidden" value="" id="deleteusernameinput" />
+                    Are you sure you want to delete this user?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Abort</button>
+                    <button type="submit" class="btn btn-secondary">Delete User</button>
                 </div>
             </form>
         </div>

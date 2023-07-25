@@ -11,9 +11,6 @@
                 <li class="
                     nav-item
                     dropdown
-                    @if(Request::is('standings/all') || Request::is('standings/month') || Request::is('standings/day'))
-                        active
-                    @endif
                 ">
                     <a class="nav-link dropdown-toggle" href="#" id="classifiche-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Standings
@@ -24,14 +21,7 @@
                         <a class="dropdown-item" href="/standings/day?page=0&page_size=10">Today</a>
                     </div>
                 </li>
-                <li class="
-                    nav-item
-                    @if(Request::is('info'))
-                        active
-                    @endif
-                ">
-                    <a class="nav-link" href="#">Info</a>
-                </li>
+                @if(auth()->user() && auth()->user()->admin)
                 <li class="
                     nav-item
                     dropdown
@@ -43,10 +33,12 @@
                         Admin
                     </a>
                     <div class="dropdown-menu" aria-labelledby="admin-dropdown">
+                        <a class="dropdown-item" href="{{route('admin.dashboard')}}">Dashboard</a>
                         <a class="dropdown-item" href="{{route('admin.user')}}">User Management</a>
                         <a class="dropdown-item" href="{{route('admin.game')}}">Game Management</a>
                     </div>
                 </li>
+                @endif
             </ul>
 
             <div class="input-group d-flex justify-content-center mx-lg-5 mx-sm-1">
@@ -102,9 +94,6 @@
                     <li class="
                         nav-item
                         dropdown
-                        @if(Request::is('profile') || Request::is('chpsw') || Request::is('chimg') || Request::is('profile.get'))
-                            active
-                        @endif
                     ">
                         <a class="nav-link dropdown-toggle" href="#" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ auth()->user()->username }}

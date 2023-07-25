@@ -133,7 +133,8 @@ class UserController extends Controller
         $usr->save();
 
         //todo send email
-        return view('html.profile.profile', ["info_msg" => "Password changed"]);
+        return $this->show($request, auth()->user()->username, ["info_msg" => "Password changed"]);
+
     }
 
     public function chimg(Request $req){
@@ -141,10 +142,10 @@ class UserController extends Controller
             return view("html.profile.profile", ["error_msg" => "Invalid Image"]);
 
         $req->profilepic->storeAs('public/avatars/', sha1(auth()->user()->username));
-        return view('html.profile.profile');
+        return $this->show($req, auth()->user()->username, ["info_msg" => "Profile picture changed"]);
     }
 
-    public function show(Request $req, $username){
+    public function show(Request $req, $username, $data = []){
         $user = User::where('username', '=', $username)->first();
         if(!$user) return response("not found", 404);
 
@@ -163,11 +164,11 @@ class UserController extends Controller
             else $ret[$i] = $ret[$i-1] + $points[$i]->point;
         }
 
-        return view('html.profile.profile', [
+        return view('html.profile.profile', array_merge([
             "user" => $user,
             "games" => $games,
-            "points" => $ret
-        ]);
+            "points" => $ret,
+        ], $data));
     }
 
     public function searchUser(Request $req){

@@ -15,6 +15,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const ctx = document.getElementById('myChart');
 
+            @if(isset($points))
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -32,6 +33,7 @@
                     }
                 }
             });
+            @endif
 
         })
     </script>
@@ -75,7 +77,7 @@
                         class="user-profile-img"
                     @endif()
                 >
-                    @if(!is_null(auth()->user()) && $user->username == auth()->user()->username)
+                    @if(!is_null(auth()->user()) && $user->username == auth()->user()->username && $user->active)
                         <button class="image-edit d-flex align-items-center justify-content-center"
                                 data-bs-toggle="modal" data-bs-target="#profileimgModal">
                             <i class="fa-solid fa-pen-to-square" style="font-size: 300%"></i>

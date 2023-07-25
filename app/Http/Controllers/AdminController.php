@@ -86,4 +86,14 @@ class AdminController extends Controller
         $u->delete();
         return redirect(route('admin.user'));
     }
+
+    public function deleteGame(Request $req){
+        $req->validate([
+            "id" => "required"
+        ]);
+
+        $u = Game::where('id', '=', $req->id)->first();
+        $u->delete();
+        return redirect(route('admin.game'));
+    }
 }

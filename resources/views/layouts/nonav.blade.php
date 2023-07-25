@@ -16,6 +16,7 @@
 <body class="antialiased">
 @yield('navbar')
 @yield('body')
+@yield('footer')
 
 </body>
 </html>

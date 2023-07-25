@@ -207,6 +207,7 @@ class GameController extends Controller
         $users = User::select(['users.username as username', DB::raw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) as points")])
             ->join('games', 'games.user_id', '=', 'users.id')
             ->whereNotNull('users.email_verified_at')
+            ->where('users.active', '=', 'true')
             ->groupBy('users.username')
             ->orderBy('points', 'DESC')
             ->orderByRaw('COUNT(games.id) ASC')

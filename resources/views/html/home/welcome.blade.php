@@ -17,4 +17,9 @@
             </div>
         </div>
     @endif
+
+    <div style="height: 80vh">
+        this is the home page
+    </div>
+
 @endsection
