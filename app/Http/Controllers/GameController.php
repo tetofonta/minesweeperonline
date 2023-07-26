@@ -204,24 +204,30 @@ class GameController extends Controller
 
     public function getStandings(Request $request, $type){
 
-        $users = User::select(['users.username as username', DB::raw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) as points")])
-            ->join('games', 'games.user_id', '=', 'users.id')
-            ->whereNotNull('users.email_verified_at')
-            ->where('users.active', '=', 'true')
-            ->groupBy('users.username')
-            ->orderBy('points', 'DESC')
-            ->orderByRaw('COUNT(games.id) ASC')
-            ->limit($request->query('page_size', 10))
-            ->offset($request->query('page', 0)*$request->query('page_size', 10));
+        $page = $request->query('page', 0);
+        $perpage = $request->query('page_size', 10);
+
+        $users = User::getStandings()
+            ->limit($perpage)
+            ->offset($page * $perpage);
 
         if($type == 'month')
             $users = $users->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 months")));
         else if($type == 'day')
             $users = $users->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 day")));
 
+        $first = $page * $perpage + 1;
+        $last = $first + $perpage - 1;
+        $usr = $users->get();
+
         return view('html.standings.standing')
-            ->with("users", $users->get())
-            ->with("count", User::count());
+            ->with("elements", $usr)
+            ->with("type", $type)
+            ->with("page", $page)
+            ->with("perpage", $perpage)
+            ->with("first", $first)
+            ->with("last", $last)
+            ->with("count", $usr->count() == 0 ? 0 : $usr[0]->total);
     }
 
 }

@@ -96,4 +96,43 @@ class AdminController extends Controller
         $u->delete();
         return redirect(route('admin.game'));
     }
+
+    public function getUserAdmin(Request $request){
+        $page = $request->query('page', 0);
+        $perpage = $request->query('page_size', 10);
+        $first = $page * $perpage;
+        $last = $first + $perpage;
+        $u = User::select()
+            ->orderBy('username', 'ASC')
+            ->limit($perpage)
+            ->offset($page * $perpage);
+
+        return view('html.admin.user')
+            ->with("elements", $u->get())
+            ->with("page", $page)
+            ->with("perpage", $perpage)
+            ->with("first", $first)
+            ->with("last", $last)
+            ->with("count", User::count());
+    }
+
+    public function getGameAdmin(Request $request){
+        $page = $request->query('page', 0);
+        $perpage = $request->query('page_size', 50);
+        $first = $page * $perpage;
+        $last = $first + $perpage;
+        $u = Game::select()
+            ->orderBy('created_at', 'DESC')
+            ->limit($perpage)
+            ->offset($page * $perpage);
+
+        return view('html.admin.game')
+            ->with("elements", $u->get())
+            ->with("page", $page)
+            ->with("perpage", $perpage)
+            ->with("first", $first)
+            ->with("last", $last)
+            ->with("count", Game::count());
+    }
+
 }

@@ -23,7 +23,7 @@
                 data: {
                     labels: ['active', 'inactive', 'blocked'],
                     datasets: [{
-                        data: [{{$users['active']}}, {{$users['inactive']}}, {{$users['blocked']}}],
+                        data: [{{$elements['active']}}, {{$elements['inactive']}}, {{$elements['blocked']}}],
                     }]
                 },
                 options: {
@@ -85,7 +85,6 @@
 @endsection
 
 @section('body')
-
 
     <div class="container my-4">
         <div class="p-4 mx-6 my-3 d-flex justify-content-between bg flex-column flex-md-row align-items-center">

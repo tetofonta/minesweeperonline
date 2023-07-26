@@ -18,6 +18,9 @@ class GameFactory extends Factory
      */
     public function definition(): array
     {
+        $create = fake()->dateTime();
+        $finish = fake()->dateTimeBetween($create, "+10 hours");
+
         return [
             "width" => fake()->randomElement([8, 16, 30]),
             "height" => fake()->randomElement([8, 16, 16]),
@@ -26,9 +29,9 @@ class GameFactory extends Factory
             "limit" => fake()->numberBetween(),
             "ranked" => fake()->boolean(),
             "status" => fake()->randomElement(["abandoned", "won", "lost"]),
-            "state" => "",
-            "created_at" => fake()->dateTime(),
-            "finished_at" => fake()->dateTime()
+            "state" => "---/---/---",
+            "created_at" => $create,
+            "finished_at" => $finish
         ];
     }
 

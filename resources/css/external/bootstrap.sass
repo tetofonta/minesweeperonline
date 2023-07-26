@@ -1,6 +1,7 @@
 $utilities: ( 'width': ( property: width, class: w, responsive: true, values: ( 25: 25%, 33: 33%, 50: 50%, 66: 66%, 75: 75%, 100: 100%, auto: auto,)))
 
 @import "bootstrap/scss/bootstrap"
+@import "bootstrap/scss/carousel"
 @import "bootstrap4-toggle/css/bootstrap4-toggle.min.css"
 
 .bg
@@ -49,6 +50,18 @@ body
         z-index: -1
         background: repeating-linear-gradient(-45deg, #cb5a5e, #cb5a5e 12px, #DDD 10px, #DDD 23px)
 
+.carousel
+    .carousel-indicators
+        [data-bs-target]
+            background-color: #000
+
+.carousel-control-prev, .carousel-control-next
+    background-color: black
+    opacity: 0
+    transition: ease .3s
+    &:hover
+        opacity: .2
+
 @include color-mode(dark)
     .bg
         @extend .bg-dark
@@ -61,3 +74,15 @@ body
 
     .danger-border:before
         background: repeating-linear-gradient(-45deg, #968c00, #968c00 12px, #000 10px, #000 23px)
+
+    .carousel
+        .carousel-indicators
+            [data-bs-target]
+                background-color: #FFF
+
+    .carousel-control-prev, .carousel-control-next
+        background-color: white
+        opacity: 0
+        transition: ease .3s
+        &:hover
+            opacity: .2

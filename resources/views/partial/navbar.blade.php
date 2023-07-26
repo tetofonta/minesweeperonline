@@ -44,7 +44,7 @@
             <div class="input-group d-flex justify-content-center mx-lg-5 mx-sm-1">
                 <input type="search" data-bs-toggle="dropdown" id="search-bar" placeholder="Search" aria-label="Search" aria-describedby="search-addon" class="form-control dropdown-toggle" />
                 <ul class="dropdown-menu dropdown-menu-left w-100" role="menu" id="search-result">
-
+                    type the username to get some results...
                 </ul>
             </div>
 

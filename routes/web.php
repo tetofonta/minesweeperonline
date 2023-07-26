@@ -53,10 +53,10 @@ Route::get('/game', [GameController::class, 'getGame'])->middleware('auth')->mid
 Route::get('/standings/{type}', [GameController::class, 'getStandings'])->name('standings');
 
 Route::get('/admin/', [AdminController::class, 'getDashoard'])->name('admin.dashboard')->middleware(Admin::class);
-Route::get('/admin/user/', function (){return view('html.admin.user');})->name('admin.user')->middleware(Admin::class);
+Route::get('/admin/user/', [AdminController::class, 'getUserAdmin'])->name('admin.user')->middleware(Admin::class);
 Route::post('/admin/user/', [AdminController::class, 'editUser'])->name('admin.user.edit')->middleware(Admin::class);
 Route::delete('/admin/user/', [AdminController::class, 'deleteUser'])->name('admin.user.delete')->middleware(Admin::class);
-Route::get('/admin/game/', function (){return view('html.admin.game');})->name('admin.game')->middleware(Admin::class);
+Route::get('/admin/game/', [AdminController::class, 'getGameAdmin'])->name('admin.game')->middleware(Admin::class);
 Route::delete('/admin/game/', [AdminController::class, 'deleteGame'])->name('admin.game.delete')->middleware(Admin::class);
 
 //should be an api

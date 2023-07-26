@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.paginated', ["use_first_content" => false, "route" => "admin.user", "route_info" => []])
 
 @section('title')
     User Management
@@ -13,17 +13,17 @@
         function openEditModal(username, enable, admin) {
             $('#usernameinput').val(username)
             $('#usernametitle').text(username)
-            if(enable)
+            if (enable)
                 $('#activeinput').attr('checked', 'checked')
             else
                 $('#activeinput').removeAttr('checked')
 
-            if(admin)
+            if (admin)
                 $('#admininput').attr('checked', 'checked')
             else
                 $('#admininput').removeAttr('checked')
 
-            if(username === '{{auth()->user()->username}}')
+            if (username === '{{auth()->user()->username}}')
                 $('#admininput').attr('disabled', 'disabled')
             else
                 $('#admininput').removeAttr('disabled')
@@ -31,7 +31,7 @@
             $('#editmodal').modal('show')
         }
 
-        function openDeleteModal(username){
+        function openDeleteModal(username) {
             $('#deleteusernameinput').val(username)
             $('#deleteusernametitle').text(username)
             $('#deletemodal').modal('show')
@@ -39,50 +39,50 @@
     </script>
 @endsection
 
-@section('body')
-    <div class="container my-4 bg">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>LastLogin</th>
-                <th>Enabled</th>
-                <th>Admin</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach(App\Models\User::select()->orderBy('username', 'ASC')->get() as $user)
-                <tr>
-                    <td><a href="{{route('profile', [$user->username])}}">{{$user->username}}</a></td>
-                    <td>{{$user->id}}</td>
-                    <td>{{$user->last_login}}</td>
-                    <td>@if($user->active)
-                            <i class="fa-regular fa-square-check"></i>
-                        @else
-                            <i class="fa-solid fa-square-xmark"></i>
-                        @endif</td>
-                    <td>@if($user->admin)
-                            <i class="fa-regular fa-square-check"></i>
-                        @else
-                            <i class="fa-solid fa-square-xmark"></i>
-                        @endif</td>
-                    <td><a href="javascript:void(0)" onclick="openEditModal('{{$user->username}}', {{$user->active ? "true" : "false"}}, {{$user->admin ? "true" : "false"}})"
-                           class="btn btn-outline"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                    <td>
-                        @if($user->username != auth()->user()->username)
-                        <a href="javascript:void(0)" onclick="openDeleteModal('{{$user->username}}')"
-                           class="btn btn-outline"><i class="fa-solid fa-trash" style="color: red;"></i></a>
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
+@section('thead')
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>LastLogin</th>
+        <th>Enabled</th>
+        <th>Admin</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+@endsection
 
+@section('content')
+    @foreach($elements as $user)
+        <tr>
+            <td><a href="{{route('profile', [$user->username])}}">{{$user->username}}</a></td>
+            <td>{{$user->id}}</td>
+            <td>{{$user->last_login}}</td>
+            <td>@if($user->active)
+                    <i class="fa-regular fa-square-check"></i>
+                @else
+                    <i class="fa-solid fa-square-xmark"></i>
+                @endif</td>
+            <td>@if($user->admin)
+                    <i class="fa-regular fa-square-check"></i>
+                @else
+                    <i class="fa-solid fa-square-xmark"></i>
+                @endif</td>
+            <td><a href="javascript:void(0)"
+                   onclick="openEditModal('{{$user->username}}', {{$user->active ? "true" : "false"}}, {{$user->admin ? "true" : "false"}})"
+                   class="btn btn-outline"><i class="fa-solid fa-pen-to-square"></i></a></td>
+            <td>
+                @if($user->username != auth()->user()->username)
+                    <a href="javascript:void(0)" onclick="openDeleteModal('{{$user->username}}')"
+                       class="btn btn-outline"><i class="fa-solid fa-trash" style="color: red;"></i></a>
+                @endif
+            </td>
+        </tr>
+    @endforeach
+@endsection
+
+@section('body_content')
     <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form action="/admin/user/" method="post" class="modal-content">

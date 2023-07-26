@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.paginated', ["use_first_content" => false, "route" => "admin.game", "route_info" => []])
 
 @section('title')
     Game Management
@@ -10,7 +10,7 @@
 
 @section('scripts')
     <script>
-        function openDeleteModal(id){
+        function openDeleteModal(id) {
             $('#deletegameid').val(id)
             $('#deleteidtitle').text(id)
             $('#deletemodal').modal('show')
@@ -18,45 +18,44 @@
     </script>
 @endsection
 
-@section('body')
-    <div class="container my-4 bg">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Bombs</th>
-                <th>Dimensions</th>
-                <th>Status</th>
-                <th>Started</th>
-                <th>Duration</th>
-                <th>Ranked</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach(App\Models\Game::select()->orderBy('created_at', 'DESC')->get() as $game)
-                <tr>
-                    <td>{{$game->id}}</td>
-                    <td>{{$game->bombs}}</td>
-                    <td>{{$game->width}}x{{$game->height}}</td>
-                    <td>{{$game->status}}</td>
-                    <td>{{$game->created_at}}</td>
-                    <td>{{$game->status != 'running' ?  date_diff($game->finished_at, $game->created_at)->format("%hh %im %ss") : ""}}</td>
-                    <td>@if($game->ranked)
-                            <i class="fa-regular fa-square-check"></i>
-                        @else
-                            <i class="fa-solid fa-square-xmark"></i>
-                        @endif</td>
-                    <td>
-                        <a href="javascript:void(0)" onclick="openDeleteModal('{{$game->id}}')"
-                           class="btn btn-outline"><i class="fa-solid fa-trash" style="color: red;"></i></a>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
+@section('thead')
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Bombs</th>
+        <th>Dimensions</th>
+        <th>Status</th>
+        <th>Started</th>
+        <th>Duration</th>
+        <th>Ranked</th>
+        <th></th>
+    </tr>
+    </thead>
+@endsection
 
+@section('content')
+    @foreach($elements as $game)
+        <tr>
+            <td>{{$game->id}}</td>
+            <td>{{$game->bombs}}</td>
+            <td>{{$game->width}}x{{$game->height}}</td>
+            <td>{{$game->status}}</td>
+            <td>{{$game->created_at}}</td>
+            <td>{{$game->status != 'running' ?  date_diff($game->finished_at, $game->created_at)->format("%hh %im %ss") : ""}}</td>
+            <td>@if($game->ranked)
+                    <i class="fa-regular fa-square-check"></i>
+                @else()
+                    <i class="fa-solid fa-square-xmark"></i>
+                @endif</td>
+            <td>
+                <a href="javascript:void(0)" onclick="openDeleteModal('{{$game->id}}')"
+                   class="btn btn-outline"><i class="fa-solid fa-trash" style="color: red;"></i></a>
+            </td>
+        </tr>
+    @endforeach
+@endsection
+
+@section('body_content')
     <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form action="/admin/game/" method="post" class="modal-content">
@@ -69,7 +68,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input name="id" type="hidden" value="" id="deletegameid" />
+                    <input name="id" type="hidden" value="" id="deletegameid"/>
                     Are you sure you want to delete this game?
                 </div>
                 <div class="modal-footer">
@@ -78,5 +77,4 @@
                 </div>
             </form>
         </div>
-    </div>
 @endsection
