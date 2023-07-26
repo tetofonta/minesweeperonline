@@ -79,14 +79,31 @@ class User extends Authenticatable
     public static function getStandings(){
         return User::select([
             'users.username as username',
-            DB::raw("(SUM(CASE WHEN games.status = 'won' AND games.ranked = true THEN games.bombs WHEN games.status != 'running' and games.ranked = true THEN -games.bombs ELSE 0 END) + 1000) as points"),
+            DB::raw("(SUM(CASE WHEN games.status = 'won' THEN games.bombs WHEN games.status != 'running' THEN -games.bombs ELSE 0 END) + 1000) as points"),
             DB::raw('COUNT(*) OVER() as total')
         ])
             ->join('games', 'games.user_id', '=', 'users.id')
             ->whereNotNull('users.email_verified_at')
             ->where('users.active', '=', 'true')
+            ->where('games.ranked', '=', 'true')
             ->groupBy('users.username')
             ->orderBy('points', 'DESC')
+            ->orderByRaw('COUNT(games.id) ASC');
+    }
+
+    public static function getStandingsAverageCompletionTime(){
+        return User::select([
+            'users.username as username',
+            DB::raw("to_char(make_interval(0, 0, 0, 0, 0, 0, (SUM(EXTRACT(EPOCH FROM games.finished_at - games.created_at))/COUNT(games.id))), 'HH24h MIm SSs') as points"),
+            DB::raw('COUNT(*) OVER() as total')
+        ])
+            ->join('games', 'games.user_id', '=', 'users.id')
+            ->whereNotNull('users.email_verified_at')
+            ->where('users.active', '=', 'true')
+            ->where('games.ranked', '=', 'true')
+            ->where('games.status', '=', 'won')
+            ->groupBy('users.username')
+            ->orderBy('points', 'ASC')
             ->orderByRaw('COUNT(games.id) ASC');
     }
 }

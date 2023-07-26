@@ -25,7 +25,7 @@
                         <i class="fa-solid fa-backward"></i>
                     </a>
                 @endif
-                <span>{{$first+1}} - {{$last}} / {{$count}}</span>
+                <span>{{$first}} - {{$last}} / {{$count}}</span>
                 @if($last >= $count)
                     <span></span>
                 @else

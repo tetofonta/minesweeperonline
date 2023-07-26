@@ -19,6 +19,8 @@
                         <a class="dropdown-item" href="/standings/all?page=0&page_size=10">All times</a>
                         <a class="dropdown-item" href="/standings/month?page=0&page_size=10">This Month</a>
                         <a class="dropdown-item" href="/standings/day?page=0&page_size=10">Today</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/standings/time?page=0&page_size=10">Fastest Players</a>
                     </div>
                 </li>
                 @if(auth()->user() && auth()->user()->admin)

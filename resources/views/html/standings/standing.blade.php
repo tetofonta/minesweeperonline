@@ -5,6 +5,7 @@
 @endsection
 
 @section('first_content')
+    @if(count($elements) > 0)
     <div class="user-profile-img"
          @if( Storage::exists("public/avatars/" . sha1($elements[0]->username)) )
              style="background-image: url({{ Storage::url("public/avatars/" . sha1($elements[0]->username)) }})"
@@ -20,6 +21,7 @@
                                           style="--fa-primary-color: #f8e45c; --fa-secondary-color: #f8e45c;"></i>
         </h1>
     </div>
+    @endif
 @endsection
 
 @section('content')

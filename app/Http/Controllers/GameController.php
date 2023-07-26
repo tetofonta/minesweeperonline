@@ -206,19 +206,19 @@ class GameController extends Controller
 
         $page = $request->query('page', 0);
         $perpage = $request->query('page_size', 10);
-
-        $users = User::getStandings()
-            ->limit($perpage)
-            ->offset($page * $perpage);
-
-        if($type == 'month')
-            $users = $users->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 months")));
-        else if($type == 'day')
-            $users = $users->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 day")));
-
         $first = $page * $perpage + 1;
         $last = $first + $perpage - 1;
-        $usr = $users->get();
+
+        $usr = $type == "time" ?
+            $this->getStandingsByTime($request, $type, $page, $perpage) :
+            $this->getStandingsByPoints($request, $type, $page, $perpage);
+
+        if($type == 'month')
+            $usr = $usr->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 months")));
+        else if($type == 'day')
+            $usr = $usr->where('games.created_at', '>', date('Y-m-dTH:i:s', strtotime("-1 day")));
+
+        $usr = $usr->get();
 
         return view('html.standings.standing')
             ->with("elements", $usr)
@@ -228,6 +228,21 @@ class GameController extends Controller
             ->with("first", $first)
             ->with("last", $last)
             ->with("count", $usr->count() == 0 ? 0 : $usr[0]->total);
+    }
+
+    private function getStandingsByPoints(Request $request, $type, $page, $perpage){
+        $users = User::getStandings()
+            ->limit($perpage)
+            ->offset($page * $perpage);
+
+        return $users;
+    }
+
+    private function getStandingsByTime(Request $request, $type, $page, $perpage){
+        $users = User::getStandingsAverageCompletionTime()
+            ->limit($perpage)
+            ->offset($page * $perpage);
+        return $users;
     }
 
 }

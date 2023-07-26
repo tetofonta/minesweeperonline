@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use DateInterval;
+use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -19,7 +21,7 @@ class GameFactory extends Factory
     public function definition(): array
     {
         $create = fake()->dateTime();
-        $finish = fake()->dateTimeBetween($create, "+10 hours");
+        $finish = DateTimeImmutable::createFromMutable($create)->add(DateInterval::createFromDateString('+' . fake()->numberBetween(3, 600) . ' minutes'));
 
         return [
             "width" => fake()->randomElement([8, 16, 30]),
