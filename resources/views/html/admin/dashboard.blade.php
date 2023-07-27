@@ -23,7 +23,7 @@
                 data: {
                     labels: ['active', 'inactive', 'blocked'],
                     datasets: [{
-                        data: [{{$elements['active']}}, {{$elements['inactive']}}, {{$elements['blocked']}}],
+                        data: [{{$users['active']}}, {{$users['inactive']}}, {{$users['blocked']}}],
                     }]
                 },
                 options: {

@@ -123,10 +123,10 @@ class UserController extends Controller
         ]);
 
         if($request->get("password") != $request->get("password-repeat"))
-            return view('html.profile.profile', ["error_msg" => "Passwords do not match"]);
+            return $this->show($request, auth()->user()->username, ["error_msg" => "Passwords do not match"]);
 
         if(!$this->checkPasswordStrength($request->get("password")))
-            return view('html.profile.profile', ["error_msg" => "Password must be at least 8 characters, must contain a capital and a non capital letter, number and symbol."]);
+            return $this->show($request, auth()->user()->username, ["error_msg" => "Password must be at least 8 characters, must contain a capital and a non capital letter, number and symbol."]);
 
         $usr = auth()->user();
         $usr->password = password_hash($request->get("password"), PASSWORD_ARGON2ID);

@@ -11,6 +11,8 @@
 
     @yield('scripts')
     @yield('css')
+    @vite("resources/css/navbar.sass")
+    @vite("resources/css/logo.sass")
     @vite('resources/css/app.sass')
 </head>
 <body class="antialiased">
